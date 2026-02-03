@@ -1,0 +1,670 @@
+<!-- this is a useless comment -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Asteroid | Sign In</title>
+  <link rel="icon" type="image/png" sizes="512x512" href="asteroid.jpeg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <!-- Supabase Library -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <!-- Google reCAPTCHA -->
+  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+  <style>
+    :root {
+      --primary: #6366f1;
+      --primary-glow: rgba(99, 102, 241, 0.5);
+      --accent: #10b981;
+      --bg-deep: #020617;
+      --bg-surface: #0f172a;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --border: rgba(255, 255, 255, 0.1);
+      --error: #ef4444;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: var(--bg-deep);
+      color: var(--text-main);
+      height: 100dvh; 
+      display: flex;
+      overflow: hidden;
+    }
+
+    /* Left Side - Immersive Visuals */
+    .hero-side {
+      flex: 1;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: clamp(2rem, 5vw, 5rem);
+      background-image: 
+        radial-gradient(circle at 20% 30%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 80% 70%, rgba(16, 185, 129, 0.1) 0%, transparent 50%);
+      border-right: 1px solid var(--border);
+    }
+
+    .hero-side::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url('asteroid.jpeg') no-repeat center;
+      background-size: cover;
+      opacity: 0.03;
+      filter: grayscale(1);
+    }
+
+    .brand-content {
+      position: relative;
+      z-index: 2;
+      animation: slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .brand-content img {
+      width: 80px;
+      height: 80px;
+      border-radius: 20px;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 0 50px var(--primary-glow);
+    }
+
+    .brand-content h1 {
+      font-size: clamp(2.5rem, 8vw, 5rem);
+      font-weight: 800;
+      letter-spacing: -4px;
+      line-height: 0.9;
+      margin-bottom: 1rem;
+      background: linear-gradient(to bottom right, #fff, var(--primary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .brand-content p {
+      font-size: 1.1rem;
+      color: var(--text-muted);
+      max-width: 400px;
+    }
+
+    /* Right Side - Adjusted for No Scrolling */
+    .form-side {
+      width: 550px;
+      background: var(--bg-surface);
+      display: flex;
+      flex-direction: column;
+      justify-content: center; /* Centered vertically to prevent top overflow */
+      padding: clamp(1rem, 3vw, 2.5rem);
+      position: relative;
+      z-index: 10;
+      box-shadow: -20px 0 50px rgba(0,0,0,0.5);
+      overflow-y: hidden; /* Removed scrolling */
+    }
+
+    .form-header { margin-bottom: 1rem; }
+    .form-header h2 { font-size: 1.6rem; font-weight: 800; margin-bottom: 0.2rem; }
+    .form-header p { color: var(--text-muted); font-size: 0.85rem; }
+
+    #login-form {
+      width: 100%;
+      animation: fadeIn 1s ease forwards;
+    }
+
+    .input-group { margin-bottom: 0.65rem; } /* Tightened spacing */
+    .input-group label {
+      display: block;
+      margin-bottom: 0.3rem;
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    input {
+      width: 100%;
+      background: var(--bg-deep);
+      border: 1px solid var(--border);
+      padding: 0.75rem;
+      border-radius: 10px;
+      color: white;
+      font-size: 0.9rem;
+      font-family: inherit;
+      transition: all 0.3s;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15);
+      transform: translateY(-2px);
+    }
+
+    #reg-fields { display: none; }
+    .checkbox-group { display: flex; align-items: center; gap: 10px; margin: 0.5rem 0; }
+    .checkbox-group input { width: 18px; height: 18px; margin: 0; }
+    .checkbox-group label { text-transform: none; font-size: 0.8rem; color: var(--text-muted); letter-spacing: 0; margin: 0; }
+    
+    .g-recaptcha { 
+      margin-bottom: 0.75rem;
+      transform: scale(0.78); /* Scaled down slightly more for fit */
+      transform-origin: 0 0;
+    }
+
+    button {
+      width: 100%;
+      padding: 0.85rem;
+      border-radius: 12px;
+      border: none;
+      font-weight: 800;
+      font-size: 0.9rem;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      margin-top: 0.4rem;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+      box-shadow: 0 10px 20px rgba(99, 102, 241, 0.2);
+    }
+
+    .btn-primary:hover {
+      background: #4f46e5;
+      transform: translateY(-2px);
+    }
+
+    .btn-link {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      margin-top: 0.6rem;
+      text-decoration: none;
+      display: block;
+      text-align: center;
+      line-height: 1.2;
+    }
+
+    #forgot-btn {
+      background: none;
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      margin-top: 0.6rem;
+      text-align: left;
+      padding: 0;
+      width: auto;
+    }
+
+    #terms-link-btn {
+      background: none;
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      margin-top: 0.4rem;
+      text-align: center;
+      width: 100%;
+      cursor: pointer;
+      border: none;
+    }
+
+    #form-message {
+      margin-top: 0.75rem;
+      padding: 0.6rem;
+      border-radius: 10px;
+      font-size: 0.8rem;
+      display: none;
+      text-align: center;
+    }
+
+    .message-active { display: block !important; background: rgba(239, 68, 68, 0.1); color: var(--error); border: 1px solid rgba(239, 68, 68, 0.1); }
+    .message-info { display: block !important; background: rgba(16, 185, 129, 0.1); color: var(--accent); border: 1px solid rgba(16, 185, 129, 0.1); }
+
+    /* Recovery Popup */
+    #popup {
+      position: fixed;
+      inset: 0;
+      background: rgba(2, 6, 23, 0.9);
+      backdrop-filter: blur(12px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 1rem;
+    }
+
+    #popup-content {
+      background: var(--bg-surface);
+      padding: clamp(1.5rem, 5vw, 3.5rem);
+      border-radius: 24px;
+      max-width: 450px;
+      text-align: center;
+      border: 1px solid var(--border);
+    }
+
+    /* Terms Popup Styles */
+    #terms-popup {
+      position: fixed;
+      inset: 0;
+      background: rgba(2, 6, 23, 0.95);
+      backdrop-filter: blur(16px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+      padding: 1rem;
+    }
+
+    #terms-content {
+      background: var(--bg-surface);
+      padding: clamp(1.5rem, 4vw, 3rem);
+      border-radius: 24px;
+      max-width: 600px;
+      width: 100%;
+      border: 1px solid var(--border);
+      animation: slideUp 0.5s ease;
+    }
+
+    .terms-scrollbox {
+      background: var(--bg-deep);
+      padding: 1rem;
+      border-radius: 12px;
+      max-height: 45dvh;
+      overflow-y: auto;
+      margin: 1rem 0;
+      font-size: 0.85rem;
+      line-height: 1.6;
+      color: var(--text-muted);
+      border: 1px solid var(--border);
+    }
+
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+    @media (max-width: 1024px) {
+      .hero-side { display: none; }
+      .form-side { width: 100%; padding: 1.5rem; justify-content: center; }
+    }
+
+    /* Addition: Alert Banner Styles */
+    .alert-banner {
+      background: rgba(99, 102, 241, 0.1);
+      border: 1px dashed var(--primary);
+      padding: 1.2rem;
+      border-radius: 16px;
+      margin-bottom: 1.5rem;
+      font-size: 0.85rem;
+      line-height: 1.5;
+    }
+    .alert-banner b { color: var(--primary); }
+
+    .input-subtitle {
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.5); /* Faded white for a modern look */
+    margin-bottom: 8px;
+    margin-top: -4px; /* Pulls it closer to the label above */
+    display: block;
+    font-weight: 400;
+}
+
+/* Optional: If you want it to glow slightly with your theme's primary color */
+#fullname-group .input-subtitle {
+    color: var(--primary);
+    opacity: 0.7;
+}
+  </style>
+</head>
+<body>
+
+  <div class="hero-side">
+    <div class="brand-content">
+      <img src="asteroid.jpeg" alt="Asteroid" />
+      <h1>ASTEROID</h1>
+    </div>
+  </div>
+
+   <div class="form-side">
+    <div class="form-header">
+      <h2 id="form-title">Sign In</h2>
+      <p id="form-subtitle">Please enter your credentials to continue.</p>
+    </div>
+
+    <form id="login-form">
+      <div id="registration-only-fields">
+        <div class="input-group" id="fullname-group" style="display: none;">
+          <label>YOur ACTUAL Full Name</label>
+          <input id="fullname" type="text" placeholder="First and Last Name" />
+        </div>
+      </div>
+
+      <div class="input-group">
+        <label>Username</label>
+        <input id="username" type="text" placeholder="Enter username" required autocomplete="username" />
+      </div>
+      <div class="input-group">
+        <label>Password</label>
+        <input id="password" type="password" placeholder="Enter password" required autocomplete="current-password" />
+      </div>
+
+      <!-- Registration verification fields -->
+      <div id="reg-verif" style="display: none;">
+        <div class="input-group">
+          <label>Humanity Check</label>
+          <div class="g-recaptcha" data-sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI" data-theme="dark"></div>
+        </div>
+        <div class="checkbox-group">
+          <input type="checkbox" id="terms-check" />
+          <label for="terms-check">I agree to the <span style="color:var(--primary);cursor:pointer;" id="inline-terms-trigger">Terms & Conditions</span></label>
+        </div>
+      </div>
+      
+      <button type="submit" id="submit-btn" class="btn-primary">Sign In</button>
+      <button type="button" id="auth-toggle" class="btn-link">Register Account</button>
+      <button type="button" id="forgot-btn">Forgot password?</button>
+      <button type="button" id="terms-link-btn">Terms & Conditions</button>
+
+      <div id="form-message"></div>
+    </form>
+  </div>
+
+  <div id="popup">
+    <div id="popup-content">
+      <h3 style="font-size: 1.5rem; margin-bottom: 1rem;">Account Recovery</h3>
+      <p style="color: var(--text-muted); margin-bottom: 2rem;">Contact the administrator to reset your credentials.</p>
+      <button id="send-email" class="btn-primary">Email Support</button>
+      <button id="close-popup" class="btn-link" style="border:none">Cancel</button>
+    </div>
+  </div>
+
+   <div id="terms-popup">
+    <div id="terms-content">
+      <h3 style="font-size: 1.5rem; margin-bottom: 0.5rem;">Terms & Conditions</h3>
+      <div class="terms-scrollbox">
+
+        <h4>1. Acceptance of Terms</h4>
+        <p>By accessing or using <strong>Asteroid</strong>, including its games, chatrooms, and community features, you acknowledge that you have read, understood, and agree to be bound by these Terms & Conditions. Continued use of the platform signifies ongoing acceptance. If you do not agree, you must discontinue use immediately.</p>
+
+        <h4>2. Privacy & Administrative Monitoring</h4>
+        <p>We are committed to maintaining a safe community. To ensure platform security and rule enforcement, Asteroid stores data necessary to operate. <strong>Administrative Monitoring:</strong> You acknowledge and consent that the site administrator may monitor site activity in real-time. This includes, but is not limited to, tracking site-specific clicks, key presses, tab focus status, and visual snapshots of your activity within the Asteroid platform boundaries. This data is used solely for moderation and security purposes.</p>
+
+        <h4>3. User Responsibility</h4>
+        <p>You are responsible for maintaining the confidentiality of your account credentials. You are fully responsible for all activity that occurs under your account. Users must behave respectfully; harassment, toxic behavior, or disruptive actions may result in immediate suspension or permanent bans.</p>
+
+        <h4>4. False Reporting & System Abuse</h4>
+        <p>Submitting intentionally false, misleading, or malicious reports is strictly prohibited. Users found abusing the reporting or support systems will face penalties, including permanent account termination.</p>
+
+        <h4>5. Service Availability</h4>
+        <p>Asteroid is provided "as is" without guarantees of uninterrupted service. We reserve the right to modify or remove features, or terminate access for any user who poses a risk to the platform or violates these Terms.</p>
+
+        <h4>6. Chatroom Conduct</h4>
+        <p>Users must adhere to the following:</p>
+        <ul>
+          <li>No harassment, bullying, or targeted attacks.</li>
+          <li>No sharing of personal identifiable information (PII).</li>
+          <li>No explicit, hateful, or illegal content.</li>
+          <li>No impersonation of staff members or other users.</li>
+        </ul>
+
+        <h4>7. Content Ownership</h4>
+        <p>All content provided by Asteroid (graphics, game assets, branding) is the property of the platform. Users may not redistrubute or modify platform content without explicit permission.</p>
+
+        <h4>8. Limitation of Liability</h4>
+        <p>Asteroid is not responsible for data loss, account compromise due to user negligence, or damages resulting from interaction with other users. Use the platform at your own risk.</p>
+
+        <h4>9. Moderators & Staff Integrity</h4>
+        <p>Staff members are held to high standards. Misuse of powers, favoritism, or leaking private information is strictly prohibited and results in immediate status revocation. The site admin (Derrick) reserves the right to review all staff actions.</p>
+
+        <h4>10. Changes to Terms</h4>
+        <p>Terms may be updated at any time. Continued use of the platform after changes are posted constitutes acceptance of the new terms.</p>
+
+      </div>
+
+      <button id="agree-terms" class="btn-primary">I Agree & Continue</button>
+      <button id="close-terms" class="btn-link" style="border:none">Close</button>
+    </div>
+  </div>
+
+
+  <script type="module">
+    const SUPABASE_URL = 'https://bjitjqpwocghsudufmyo.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJqaXRqcXB3b2NnaHN1ZHVmbXlvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAxMjg4MzMsImV4cCI6MjA4NTcwNDgzM30.idIykur3OhlZoOybDYPBTHUc95jvSZq8_cMV_zEKWQc';
+    
+    const { createClient } = window.supabase;
+    const db = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    // FIXED: Multi-Layer Persistent ID (LocalStorage + Cookie Backup)
+    function getSecureDeviceId() {
+      const KEY = 'asteroid_instance_v2';
+      // Try local storage
+      let id = localStorage.getItem(KEY);
+      
+      // Try cookies if storage empty (stops easy alt by clearing site data)
+      if (!id) {
+          const cookieMatch = document.cookie.match(new RegExp('(^| )' + KEY + '=([^;]+)'));
+          if (cookieMatch) id = cookieMatch[2];
+      }
+
+      if (!id) {
+        const randomValues = new Uint32Array(4);
+        window.crypto.getRandomValues(randomValues);
+        const salt = btoa([
+          window.screen.width, window.screen.height, 
+          navigator.hardwareConcurrency || 0,
+          performance.now()
+        ].join('.')).slice(0, 10);
+        id = `AST-${randomValues[0].toString(16)}-${salt}-${randomValues[1].toString(16)}`;
+        
+        // Save to both
+        localStorage.setItem(KEY, id);
+        document.cookie = `${KEY}=${id}; Max-Age=315360000; path=/; SameSite=Strict`;
+      }
+      return id;
+    }
+
+    (async function authSystem() {
+      const loginForm = document.getElementById("login-form");
+      const formMessage = document.getElementById("form-message");
+      const termsPopup = document.getElementById("terms-popup");
+      const agreeBtn = document.getElementById("agree-terms");
+      const closeTermsBtn = document.getElementById("close-terms");
+      const termsLinkBtn = document.getElementById("terms-link-btn");
+      const authToggle = document.getElementById("auth-toggle");
+      const submitBtn = document.getElementById("submit-btn");
+      const formTitle = document.getElementById("form-title");
+      const formSubtitle = document.getElementById("form-subtitle");
+      const fullnameGroup = document.getElementById("fullname-group");
+      const regVerif = document.getElementById("reg-verif");
+      const inlineTermsTrigger = document.getElementById("inline-terms-trigger");
+
+      let isSignUpMode = false;
+      let pendingMatch = null;
+
+      function showMessage(text, isError = true) {
+        formMessage.textContent = text;
+        formMessage.className = isError ? "message-active" : "message-info";
+      }
+
+      sessionStorage.clear();
+
+      authToggle.addEventListener("click", () => {
+        isSignUpMode = !isSignUpMode;
+        formTitle.textContent = isSignUpMode ? "Register" : "Sign In";
+        formSubtitle.textContent = isSignUpMode ? "Create an account to get started." : "Please enter your credentials to continue.";
+        submitBtn.textContent = isSignUpMode ? "Create Account" : "Sign In";
+        authToggle.textContent = isSignUpMode ? "Already have an account? Sign In" : "Register Account";
+        fullnameGroup.style.display = isSignUpMode ? "block" : "none";
+        regVerif.style.display = isSignUpMode ? "block" : "none";
+        document.getElementById("fullname").required = isSignUpMode;
+        formMessage.className = "";
+        formMessage.textContent = "";
+        if (isSignUpMode && typeof grecaptcha !== 'undefined') grecaptcha.reset();
+      });
+
+      inlineTermsTrigger.addEventListener("click", () => {
+        termsPopup.style.display = "flex";
+        closeTermsBtn.style.display = "block";
+      });
+
+      if (loginForm) {
+        loginForm.addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const userName = document.getElementById("username").value;
+          const passWord = document.getElementById("password").value;
+          const fullName = document.getElementById("fullname").value;
+          const persistentId = getSecureDeviceId();
+
+          try {
+            if (isSignUpMode) {
+              if (!fullName.includes(" ")) {
+                showMessage("Please enter your full First and Last name.", true);
+                return;
+              }
+              
+              const recaptchaResponse = grecaptcha.getResponse();
+              if (!recaptchaResponse) {
+                showMessage("Please complete the reCAPTCHA.", true);
+                return;
+              }
+
+              if (!document.getElementById("terms-check").checked) {
+                showMessage("You must accept the Terms and Conditions.", true);
+                return;
+              }
+              
+              // FIX: Catch alts by checking normalized name
+              const normalizedName = fullName.toLowerCase().trim();
+
+              const { data: altAccount } = await db
+                .from('profiles')
+                .select('username')
+                .or(`device_id.eq.${persistentId},full_name.ilike.${normalizedName}`)
+                .maybeSingle();
+
+              if (altAccount) {
+                showMessage("Security Violation: You already have an account linked to this device or name.", true);
+                return;
+              }
+
+              // Check for Username Collision (Case-Insensitive Fix Applied)
+              const { data: existingUser } = await db
+                .from('profiles')
+                .select('username')
+                .ilike('username', userName)
+                .maybeSingle();
+
+              if (existingUser) {
+                showMessage("Username already taken (try a different variation).", true);
+                return;
+              }
+
+              const { data: newUser, error } = await db
+                .from('profiles')
+                .insert([{ 
+                    username: userName, 
+                    password: passWord, 
+                    is_banned: false, 
+                    full_name: fullName,
+                    device_id: persistentId
+                }])
+                .select()
+                .single();
+
+              if (error) throw error;
+
+              localStorage.setItem(`agreed_terms_${userName}`, "true");
+              showMessage("Account created! Please Sign In.", false);
+              authToggle.click();
+            } else {
+              const { data: user, error } = await db
+                .from('profiles')
+                .select('*')
+                .eq('username', userName)
+                .eq('password', passWord)
+                .maybeSingle();
+
+              if (error || !user) {
+                showMessage("Invalid username or password.", true);
+                return;
+              }
+
+              // SIGN-IN DEVICE ENFORCEMENT FIX APPLIED
+              if (user.device_id && user.device_id !== persistentId) {
+                 showMessage("Security Alert: This account is linked to another computer/device and cannot be accessed here.", true);
+                 return;
+              }
+
+              if (user.is_banned === true) {
+                if (user.ban_until) {
+                  const expiry = new Date(user.ban_until).getTime();
+                  if (Date.now() >= expiry) {
+                    await db.from('profiles').update({ 
+                      is_banned: false, 
+                      ban_until: null, 
+                      ban_reason: null 
+                    }).eq('username', userName);
+                    user.is_banned = false;
+                  } else {
+                    showMessage(`Access denied. Reason: ${user.ban_reason || "Security Violation"}`, true);
+                    return;
+                  }
+                } else {
+                  showMessage(`Access denied. Reason: ${user.ban_reason || "Security Violation"}`, true);
+                  return;
+                }
+              }
+
+              if (localStorage.getItem(`agreed_terms_${userName}`) === "true") {
+                sessionStorage.setItem("usernamePassword", JSON.stringify(user));
+                window.location.href = "maintenance.html";
+              } else {
+                pendingMatch = user;
+                termsPopup.style.display = "flex";
+                closeTermsBtn.style.display = "none";
+              }
+            }
+          } catch (err) {
+            console.error(err);
+            showMessage("Database connection error.", true);
+          }
+        });
+      }
+
+      agreeBtn.addEventListener("click", () => {
+        if (pendingMatch) {
+          localStorage.setItem(`agreed_terms_${pendingMatch.username}`, "true");
+          sessionStorage.setItem("usernamePassword", JSON.stringify(pendingMatch));
+          window.location.href = "maintenance.html";
+        }
+        termsPopup.style.display = "none";
+      });
+
+      termsLinkBtn.addEventListener("click", () => {
+        pendingMatch = null;
+        termsPopup.style.display = "flex";
+        closeTermsBtn.style.display = "block";
+      });
+
+      closeTermsBtn.addEventListener("click", () => {
+        termsPopup.style.display = "none";
+      });
+
+      if (sessionStorage.getItem("usernamePassword")) window.location.href = "maintenance.html";
+    })();
+
+    const forgotBtn = document.getElementById("forgot-btn");
+    const popup = document.getElementById("popup");
+    const closePopup = document.getElementById("close-popup");
+    const sendEmail = document.getElementById("send-email");
+
+    forgotBtn.addEventListener("click", () => popup.style.display = "flex");
+    closePopup.addEventListener("click", () => popup.style.display = "none");
+    sendEmail.addEventListener("click", () => {
+      window.location.href = "mailto:derrick.richard@pothisd.us?subject=Asteroid Recovery";
+    });
+  </script>
+</body>
+</html>
