@@ -319,7 +319,51 @@
   </style>
 </head>
 <body>
+<!-- START SECURITY BANNER -->
+<style>
+  .safety-banner {
+    background: linear-gradient(90deg, #991b1b 0%, #ef4444 50%, #991b1b 100%);
+    color: #ffffff;
+    padding: 14px 24px;
+    text-align: center;
+    width: 100%;
+    z-index: 9999;
+    position: relative;
+    box-shadow: 0 4px 20px rgba(239, 68, 68, 0.4);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 0.95rem;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+  }
 
+  .safety-banner b {
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    background: rgba(0, 0, 0, 0.2);
+    padding: 2px 10px;
+    border-radius: 6px;
+    margin-right: 10px;
+  }
+
+  /* Ensures the banner pushes the rest of the app down */
+  body {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    margin: 0;
+  }
+  
+  /* If you have a main wrapper, make sure it fills the remaining space */
+  .app-main-layout, main, .wrapper {
+    flex: 1;
+    overflow: hidden;
+  }
+</style>
+
+<div class="safety-banner">
+  <span>⚠️ <b>Security Notice</b> To prioritize your privacy following an infrastructure upgrade, we have implemented a total database reset. All previous credentials have been retired for your protection. Please <b>Register a new account</b> to restore your access.</span>
+</div>
+<!-- END SECURITY BANNER -->
+  
   <div class="hero-side">
     <div class="brand-content">
       <img src="asteroid.jpeg" alt="Asteroid" />
