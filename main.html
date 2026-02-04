@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Asteroid | Dashboard</title>
-  <link rel="icon" type="image/png" sizes="512x512" href="asteroid.jpeg" />
+  <title>Comet | Dashboard</title>
+  <link rel="icon" type="image/png" sizes="512x512" href="Comet.jpeg" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
@@ -19,7 +19,7 @@
   <style>
     /* 
     ========================================================================
-    ASTEROID DESIGN SYSTEM - CSS VARIABLES
+    Comet DESIGN SYSTEM - CSS VARIABLES
     ========================================================================
     */
     :root {
@@ -2025,16 +2025,16 @@ input[type="submit"]:focus-visible {
 
   <nav>
     <div class="nav-left">
-      <img src="asteroid.jpeg" alt="Asteroid Logo" class="nav-logo" id="mainLogo" />
+      <img src="Comet.jpeg" alt="Comet Logo" class="nav-logo" id="mainLogo" />
       <div class="nav-brand">
-        <h1>ASTEROID</h1>
+        <h1>Comet</h1>
       </div>
       <div class="online-stats" id="siteOnlineStats" onclick="showOnlineList('site')">Users Online: 0 | Staff Online: 0</div>
     </div>
     <div class="nav-right">
       <button class="btn btn-shop" onclick="openShop()">Shop ✨</button>
       <button id="modNavBtn" class="btn" style="display:none; background: var(--accent); border:none;" onclick="openModPanel()">Mod Panel</button>
-      <button class="btn btn-primary" onclick="openChat()">Asteroid Chat <span id="unreadBadge" style="background:#ef4444; color:white; border-radius:50%; padding:2px 7px; font-size:0.75rem; margin-left:6px; display:none;">0</span></button>
+      <button class="btn btn-primary" onclick="openChat()">Comet Chat <span id="unreadBadge" style="background:#ef4444; color:white; border-radius:50%; padding:2px 7px; font-size:0.75rem; margin-left:6px; display:none;">0</span></button>
       <button class="btn" onclick="saveData()">Save</button>
       <button class="btn" onclick="document.getElementById('file').click()">Load</button>
       <a href="https://docs.google.com/forms/d/e/1FAIpQLSfTZ5mk7aVxGnheE0Zo7kbVrV_XVCuTXSVMVElE5yYZbs5A6Q/viewform?usp=publish-editor" class="btn btn-danger" target="_blank" rel="noopener noreferrer">Report A Bug</a>
@@ -2063,7 +2063,7 @@ input[type="submit"]:focus-visible {
           <div class="menu-items">
             <a class="menu-link" onclick="location.reload()">Refresh Data</a>
             <a class="menu-link" onclick="openSettings()">Settings</a>
-            <a href="https://asteroid-pixel.github.io" class="menu-link logout">Log Out</a>
+            <a href="https://Comet-pixel.github.io" class="menu-link logout">Log Out</a>
           </div>
         </div>
       </div>
@@ -2074,7 +2074,7 @@ input[type="submit"]:focus-visible {
   <div class="modal-overlay" id="shopModal">
     <div class="modal-card" style="max-width: 600px;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-            <h2>Asteroid Shop</h2>
+            <h2>Comet Shop</h2>
             <div style="font-weight: 800; color: var(--gold); background: rgba(255, 215, 0, 0.1); padding: 5px 15px; border-radius: 10px;">
                 Balance: <span id="shopBalance">0</span> 🪙
             </div>
@@ -2394,11 +2394,11 @@ input[type="submit"]:focus-visible {
     <iframe id="zoneFrame"></iframe>
   </div>
 
-  <!-- ASTEROID GLOBAL CHAT SYSTEM -->
+  <!-- Comet GLOBAL CHAT SYSTEM -->
   <div id="chatViewer">
     <div id="zoneHeader">
       <div>
-        <span style="font-weight: 800; font-size: 1.2rem;">Asteroid Chat</span>
+        <span style="font-weight: 800; font-size: 1.2rem;">Comet Chat</span>
         <div class="online-stats" id="chatOnlineStats" onclick="showOnlineList('chat')" style="margin-left: 12px; vertical-align: middle;">Users Online: 0 | Staff Online: 0</div>
       </div>
       <div style="flex: 1; display: flex; justify-content: flex-end; padding: 0 20px;">
@@ -2469,7 +2469,7 @@ input[type="submit"]:focus-visible {
 
   <footer>
     <p>
-      <a href="https://asteroid-pixel.github.io">Asteroid</a> &copy; 2025 by 
+      <a href="https://Comet-pixel.github.io">Comet</a> &copy; 2025 by 
       <a href="https://derrickrichard.github.io/profile/">Derrick Richard</a>
     </p>
     <div style="margin-top: 1rem; opacity: 0.6;">
@@ -2511,7 +2511,7 @@ input[type="submit"]:focus-visible {
 
     // FIXED: Multi-Layer Persistent ID (LocalStorage + Cookie Backup)
     function getSecureDeviceId() {
-      const KEY = 'asteroid_instance_v2';
+      const KEY = 'Comet_instance_v2';
       // Try local storage
       let id = localStorage.getItem(KEY);
       
@@ -2907,20 +2907,20 @@ input[type="submit"]:focus-visible {
     }
 
     function recordViolation() {
-        let violations = parseInt(localStorage.getItem('asteroid_violations') || "0") + 1;
-        localStorage.setItem('asteroid_violations', violations);
+        let violations = parseInt(localStorage.getItem('Comet_violations') || "0") + 1;
+        localStorage.setItem('Comet_violations', violations);
 
         if (violations === 1) {
             const expiry = Date.now() + (10 * 60 * 1000);
-            localStorage.setItem('asteroid_violations', violations);
-            localStorage.setItem('asteroid_ban_expiry', expiry);
-            localStorage.setItem('asteroid_ban_type', 'chat');
+            localStorage.setItem('Comet_violations', violations);
+            localStorage.setItem('Comet_ban_expiry', expiry);
+            localStorage.setItem('Comet_ban_type', 'chat');
             addSystemMessage("System Warning", "This is your 1st violation of the community policy. You have been banned from chatting for 10 minutes.");
             addViolation(currentUser, "Warning", "Auto-mod: Profanity used in chat.", "System");
         } else if (violations >= 2) {
             const expiry = Date.now() + (7 * 24 * 60 * 60 * 1000);
-            localStorage.setItem('asteroid_ban_expiry', expiry);
-            localStorage.setItem('asteroid_ban_type', 'site');
+            localStorage.setItem('Comet_ban_expiry', expiry);
+            localStorage.setItem('Comet_ban_type', 'site');
             addViolation(currentUser, "Site Ban", "Auto-mod: Second violation of community policy.", "System");
             alert("SYSTEM ALERT:\nThis is your second violation. You are now banned from the whole site for 1 week.");
             location.reload(); 
@@ -2934,15 +2934,15 @@ input[type="submit"]:focus-visible {
      */
     async function checkActiveBan(silent = false) {
         // 1. Check local storage first
-        const expiry = localStorage.getItem('asteroid_ban_expiry');
-        const type = localStorage.getItem('asteroid_ban_type');
+        const expiry = localStorage.getItem('Comet_ban_expiry');
+        const type = localStorage.getItem('Comet_ban_type');
         
         // LOCAL EXPIRY CHECK
         if (expiry) {
             const expTime = parseInt(expiry);
             if (Date.now() >= expTime && expTime < 9999999999999) {
-                localStorage.removeItem('asteroid_ban_expiry');
-                localStorage.removeItem('asteroid_ban_type');
+                localStorage.removeItem('Comet_ban_expiry');
+                localStorage.removeItem('Comet_ban_type');
             } else {
                 const mins = Math.ceil((expTime - Date.now()) / 60000);
                 if (type === 'chat') {
@@ -3002,7 +3002,7 @@ input[type="submit"]:focus-visible {
         document.body.innerHTML = `
                 <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; height:100vh; background: #020617; color: white; text-align: center; padding: 2rem;">
                   <h1 style="color: #ef4444; font-size: 3rem; margin-bottom: 0;">SITE ACCESS REVOKED</h1>
-                  <p style="font-size: 1.2rem; margin-top: 1rem;">You are banned from Asteroid due to community violations.</p>
+                  <p style="font-size: 1.2rem; margin-top: 1rem;">You are banned from Comet due to community violations.</p>
                   ${reasonText}
                   <p style="color: var(--text-muted); opacity:0.8;">${timeText}</p>
                   <button class="btn" style="margin-top: 2rem;" onclick="location.reload()">Check Status</button>
@@ -3030,7 +3030,7 @@ input[type="submit"]:focus-visible {
         win.document.open();
         win.document.write(html);
         win.document.close();
-        win.document.title = file.name + " | Asteroid External";
+        win.document.title = file.name + " | Comet External";
       } catch (err) {
         win.close();
         alert("Failed to fetch game code.");
@@ -3324,7 +3324,7 @@ if (currentUser === 'Derrick') {
         }
     }
 
-    // ASTEROID CHAT ENGINE LOGIC
+    // Comet CHAT ENGINE LOGIC
     let currentReplyToId = null;
     let currentRecipient = null;
     let allMessages = [];
@@ -3379,7 +3379,7 @@ if (currentUser === 'Derrick') {
         if (all.length > 0) {
             const newest = all[all.length - 1];
             if (newest && newest.created_at) {
-                localStorage.setItem(`asteroid_last_seen_${activeChannel}`, newest.created_at);
+                localStorage.setItem(`Comet_last_seen_${activeChannel}`, newest.created_at);
             }
         }
     }
@@ -3396,8 +3396,8 @@ if (currentUser === 'Derrick') {
     }
 
     async function checkMissedMessages() {
-        const lastGlobal = localStorage.getItem('asteroid_last_seen_global') || new Date(0).toISOString();
-        const lastStaff = localStorage.getItem('asteroid_last_seen_staff') || new Date(0).toISOString();
+        const lastGlobal = localStorage.getItem('Comet_last_seen_global') || new Date(0).toISOString();
+        const lastStaff = localStorage.getItem('Comet_last_seen_staff') || new Date(0).toISOString();
 
         const { data: globalMissed } = await _supabase.from('messages')
             .select('content, username, created_at')
@@ -4073,7 +4073,7 @@ async function handleSignOutUser(targetUser) {
             else if (cmd === '/signout_all') {
                 sessionStorage.clear();
                 localStorage.removeItem('usernamePassword'); // Ensure local data is cleared
-                window.location.href = "https://asteroid-pixel.github.io";
+                window.location.href = "https://Comet-pixel.github.io";
             } 
             // HANDLE TARGETED SIGN OUT
             else if (cmd.startsWith('/signout_user:')) {
@@ -4081,7 +4081,7 @@ async function handleSignOutUser(targetUser) {
                 if (currentUser === target) {
                     sessionStorage.clear();
                     localStorage.removeItem('usernamePassword');
-                    window.location.href = "https://asteroid-pixel.github.io";
+                    window.location.href = "https://Comet-pixel.github.io";
                 }
             } 
             else {
@@ -4115,8 +4115,8 @@ async function handleSignOutUser(targetUser) {
                 }
                 subscribeStaffMessages();
             }
-            const savedName = localStorage.getItem('asteroid_full_name') || data.full_name;
-            const savedPfp = localStorage.getItem('asteroid_pfp');
+            const savedName = localStorage.getItem('Comet_full_name') || data.full_name;
+            const savedPfp = localStorage.getItem('Comet_pfp');
             const pTrigger = document.getElementById('profileTrigger');
             pTrigger.className = 'profile-trigger'; 
             if (data.leaderboard_border && data.leaderboard_border !== 'none') pTrigger.classList.add('border-' + data.leaderboard_border);
@@ -4157,8 +4157,8 @@ if (data.name_font) pMenuName.classList.add('font-' + data.name_font);
     function toggleToolsMenu() { document.getElementById('toolsMenu').classList.toggle('active'); }
     
     function openSettings() {
-        document.getElementById('setFullName').value = localStorage.getItem('asteroid_full_name') || "";
-        document.getElementById('setPfpUrl').value = localStorage.getItem('asteroid_pfp') || "";
+        document.getElementById('setFullName').value = localStorage.getItem('Comet_full_name') || "";
+        document.getElementById('setPfpUrl').value = localStorage.getItem('Comet_pfp') || "";
         document.getElementById('settingsModal').classList.add('active');
         document.getElementById('profileMenu').classList.remove('active');
     }
@@ -4168,8 +4168,8 @@ if (data.name_font) pMenuName.classList.add('font-' + data.name_font);
     function saveSettings() {
         const name = document.getElementById('setFullName').value;
         const pfp = document.getElementById('setPfpUrl').value;
-        localStorage.setItem('asteroid_full_name', name);
-        localStorage.setItem('asteroid_pfp', pfp);
+        localStorage.setItem('Comet_full_name', name);
+        localStorage.setItem('Comet_pfp', pfp);
         loadProfile(); closeSettings();
         _supabase.from('profiles').upsert({ username: currentUser, full_name: name }, { onConflict: 'username' });
     }
@@ -4469,7 +4469,7 @@ fetchLeaderboard('weekly');
 
     const zonesURL = "zones.json";
     const coverURL = "https://cdn.jsdelivr.net/gh/gn-math/covers@main";
-    const htmlURL = "https://cdn.jsdelivr.net/gh/asteroid-pixel/html@main";
+    const htmlURL = "https://cdn.jsdelivr.net/gh/Comet-pixel/html@main";
     let zones = []; let popularityData = {};
 
     async function listZones() {
@@ -4567,7 +4567,7 @@ fetchLeaderboard('weekly');
       let storageObj = {}; for (let i = 0; i < localStorage.length; i++) storageObj[localStorage.key(i)] = localStorage.getItem(localStorage.key(i));
       let blob = new Blob([JSON.stringify(storageObj)], { type: "text/plain" });
       const link = document.createElement("a"); link.href = URL.createObjectURL(blob);
-      link.download = `asteroid_backup.json`; link.click();
+      link.download = `Comet_backup.json`; link.click();
     }
 
     function loadData(event) {
@@ -4668,7 +4668,7 @@ function initSurveillanceSubscription() {
     
     if (feedImg) {
         feedImg.style.filter = "grayscale(100%) brightness(30%)";
-        feedImg.src = "asteroid.jpeg"; 
+        feedImg.src = "Comet.jpeg"; 
     }
 
     if (logEl) {
@@ -4691,7 +4691,7 @@ function stopCaptureLoop() {
     console.log("Surveillance loop transitioned to Microsoft Clarity Cloud.");
 }
 
-   /* --- FIXED GAMBLING LOGIC FOR ASTEROID --- */
+   /* --- FIXED GAMBLING LOGIC FOR Comet --- */
 let gambleSide = 'heads';
 
 function toggleGambleOverlay(show) {
@@ -4807,7 +4807,7 @@ if (logoEl) {
             // 3. Give reward
             profileData.coins += 100;
             document.getElementById('pMenuCoins').innerText = profileData.coins;
-            addSystemMessage("ASTEROID DISCOVERED", "You found a secret cache! +100 Coins.");
+            addSystemMessage("Comet DISCOVERED", "You found a secret cache! +100 Coins.");
 
             // 4. Reset logo position after it flies back
             logoClicks = 0;
@@ -4962,7 +4962,7 @@ function executeLogout() {
     afkSeconds = -999999;
     sessionStorage.clear();
     localStorage.removeItem('usernamePassword');
-    window.location.href = "https://asteroid-pixel.github.io";
+    window.location.href = "https://Comet-pixel.github.io";
 }
 
 // Launch
